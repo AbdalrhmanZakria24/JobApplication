@@ -1,6 +1,6 @@
 
+using JobApplication.Application.CQRS.Command.CancelApp;
 using JobApplication.Application.Interfaces;
-using JobApplication.Application.Services;
 using JobApplication.Infrastructure.Persistence;
 using JobApplication.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,9 +28,11 @@ namespace JobApplication.API
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            builder.Services.AddScoped<JobService>();
             builder.Services.AddScoped<IJobRepository, JobRepository>();
-            builder.Services.AddScoped<CloseJob>();
+            builder.Services.AddMediatR(cff=>
+            {
+                cff.RegisterServicesFromAssembly(typeof(CancelAppCommand).Assembly);
+            });
   
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
